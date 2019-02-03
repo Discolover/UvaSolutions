@@ -7,13 +7,17 @@
 #include <array>
 #define maxWordLen 16
 using namespace std;
-array<char, 26> alphabet;
+array<char, 26> alphabetDictVal;
+array<char, 26> alphabetEncVal;
 int capacity = 0;
 
 
 void ClearAlphabet() {
-	for (int i = 0; i < alphabet.size(); i++)
-		alphabet[i] = '*';
+	for (int i = 0; i < 26; i++) {
+		alphabetDictVal[i] = '*';
+		alphabetEncVal[i] = '*';
+	}
+		
 }
 void AddToDict(string word, vector<string> dict[16]) {
 
@@ -46,7 +50,7 @@ void ShowDecodedLine(vector<string> original_encLine) {
 			cout << ' ';
 		for (int j = 0; j < original_encLine[i].length(); j++)
 		{
-			cout << (char)(alphabet[original_encLine[i][j] - 97]);
+			cout << (char)(alphabetDictVal[original_encLine[i][j] - 97]);
 		}
 	}
 	cout << endl;
@@ -56,9 +60,11 @@ vector<string> SameLengthDictWords(string encWord, vector<string> dict[16]) {
 }
 
 bool CompatableLetters(char letter, char dict_letter) {
-	if (alphabet[letter - 97] == '*')
+	if ((alphabetEncVal[dict_letter - 97] == '*')
+		&& (alphabetDictVal[letter - 97] == '*'))
 		return true;
-	if (alphabet[letter - 97] == (char)dict_letter)
+	if ((alphabetEncVal[dict_letter - 97] == letter)
+		&& (alphabetDictVal[letter - 97] == dict_letter))
 		return true;
 
 	return false;
@@ -66,16 +72,19 @@ bool CompatableLetters(char letter, char dict_letter) {
 
 void UpdateAlphabet(char letter, char dict_letter)
 {
-	alphabet[letter - 97] = dict_letter;
+	alphabetEncVal[dict_letter - 97] = letter;
+	alphabetDictVal[letter - 97] = dict_letter;
 }
 
 bool Match(string encWord,string dictWord) {
-	array<char, 26> originalAlphabet = alphabet;
+	array<char, 26> Original_alphabetDictVal = alphabetDictVal;
+	array<char, 26> Original_alphabetEnctVal = alphabetEncVal;
 	for (int i = 0; i < encWord.length(); i++)
 	{
 		if (!CompatableLetters(encWord[i], dictWord[i]))
 		{
-			alphabet = originalAlphabet;
+			alphabetDictVal = Original_alphabetDictVal;
+			alphabetEncVal = Original_alphabetEnctVal;
 			return false;
 		}
 		UpdateAlphabet(encWord[i], dictWord[i]);
@@ -99,7 +108,8 @@ bool FindAlphabet(vector<string> toDecode, vector<string> dict[16])
 	
 	for (int i = 0; i < possibleDictWords.size(); i++)
 	{
-		array<char, 26> originalAlphabet = alphabet;
+		array<char, 26> Original_alphabetDictVal = alphabetDictVal;
+		array<char, 26> Original_alphabetEnctVal = alphabetEncVal;
 		if (Match(toDecode[last], possibleDictWords[i])) {
 
 			string tempWord = toDecode[last];
@@ -113,7 +123,8 @@ bool FindAlphabet(vector<string> toDecode, vector<string> dict[16])
 			toDecode.push_back(tempWord);
 			dict[toDecode[last].length() % maxWordLen] = tempVector;
 			capacity++;
-			alphabet = originalAlphabet;
+			alphabetDictVal = Original_alphabetDictVal;
+			alphabetEncVal = Original_alphabetEnctVal;
 		}
 	}
 	return false;
