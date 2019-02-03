@@ -1,10 +1,10 @@
 #include <stdio.h>
-#include "stdafx.h"
 #include <string>
 #include <iostream>
 #include <sstream>
 #include <vector>
 #include <array>
+#include <algorithm>
 #define maxWordLen 16
 using namespace std;
 array<char, 26> alphabetDictVal;
@@ -161,7 +161,7 @@ int main()
 	ClearAlphabet();
 
 	int n;
-	scanf_s("%d", &n);
+	scanf("%d", &n);
 	for (int i = 0; i < n; i++)
 	{
 		string word;
@@ -169,7 +169,7 @@ int main()
 		AddToDict(word, dict);
 	}
 	string input;
-	scanf_s("\n");
+	scanf("\n");
 	while (getline(cin, input))
 	{
 		string word;
