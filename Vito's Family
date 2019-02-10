@@ -1,0 +1,42 @@
+//solved via sorting and order statistic's property
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+int streets[500];
+int nOfRelatives;
+
+int compare(const void *a, const void *b)
+{
+	return (*(int*)a - *(int*)b);
+}
+
+int SolveAndGetResult() {
+	qsort(streets, nOfRelatives, sizeof(int), compare);
+	int res = 0;
+	int medianIndex = ceil(nOfRelatives/2);
+	for (int i = 0;i < nOfRelatives; i++)
+	{
+		if (medianIndex == i)
+			continue;
+		res += abs(streets[i] - streets[medianIndex]);
+	}
+	return res;
+  
+}
+int main()
+{
+	int nOfCases;
+	scanf("%d", &nOfCases);
+	while (nOfCases--) {
+		scanf("%d ",&nOfRelatives);
+		for (int i = 0; i < nOfRelatives; i++)
+		{
+			scanf("%d", &streets[i]);
+		}
+
+	printf("%d\n",SolveAndGetResult());
+		
+	}
+    return 0;
+}
+
