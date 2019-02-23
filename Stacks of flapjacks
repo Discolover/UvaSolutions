@@ -1,0 +1,98 @@
+
+#include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
+#define max_stack_size 30
+#define max_sz max_stack_size * 3 * 2 - 1 
+int comp(const short *i, const short *j)
+{
+	return -(*i - *j);
+}
+int main()
+{
+	short p = 0;
+	short stack[max_stack_size], sorted[max_stack_size];
+	short n;
+	char inp[max_sz];
+
+	while (fgets(inp, max_sz, stdin) ) {
+		if (inp[0] == '\n') break;
+
+		short d = -1;
+		short fDP = 0;
+		n = 0;
+
+		for (short i = 0; inp[i - 1] != '\n'; i++)
+		{
+
+			if (inp[i + 1] == ' ' || inp[i + 1] == '\n')
+			{
+				d++;
+				for (d; d >= 0; d--, fDP++)
+				{
+					p += (inp[fDP] - '0') * (short)pow(10, d);
+				}
+				stack[n++] = p;
+				p = 0, d = -1;
+				fDP = i + 2;
+				i++;
+			}
+			else
+				d++;
+		}
+		for (short i = 0; i < n; i++) {
+
+			printf("%d", stack[i]);
+			sorted[i] = stack[i];
+			if (i + 1 < n)
+				printf(" ");
+
+		}
+		printf("\n");
+
+		qsort(sorted, n, sizeof(short), (int(*) (const void *, const void *)) comp);
+
+		short imax = 1;
+		short j;
+
+		for (short i = 0; i < n; i++)
+		{
+
+			for (j = 0; j < n; j++)
+			{
+				if (sorted[i] == stack[j])
+					break;
+			}
+
+			if (n - 1 - i == j) {
+				imax++;
+				continue;
+			}
+
+			if (j > 0) {
+				for (int k = 0; k < (j + 1) / 2; k++)
+				{
+					short temp = stack[k];
+					stack[k] = stack[j - k];
+					stack[j - k] = temp;
+				}
+				printf("%d ", n - j);
+			}
+
+			for (int q = 0; q < (n - imax + 1) / 2; q++)
+			{
+				int temp = stack[q];
+				stack[q] = stack[n - imax - q];
+				stack[n - imax - q] = temp;
+			}
+			printf("%d ", imax);
+			imax++;
+
+		}
+		printf("0\n");
+	}
+
+	return 0;
+}
+
+
