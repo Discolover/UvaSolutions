@@ -1,0 +1,102 @@
+//response from Uva is WA, but ALL sums are correspond to right answers. Very strange.
+#include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
+int people[1000];
+int t;
+int result[5000][2];
+int n;
+int sum;
+int comp(const int *i, const int *j)
+{
+	return *i - *j;
+}
+void trio(int lK_l,int lK_r, int a, int b) {
+
+	int var1 = b + lK_r * 2;
+	int var2 = a + lK_l + b;
+	if (var1 < var2) {
+		result[t][0] = a;
+		result[t++][1] = b;
+		result[t++][0] = lK_r;
+		result[t][0] = lK_l;
+		result[t++][1] = lK_r;
+		sum += var1;
+	}
+	else {
+		result[t][0] = lK_l;
+		result[t++][1] = a;
+		result[t++][0] = lK_l;
+		result[t][0] = lK_l;
+		result[t++][1] = b;
+		sum += var2;
+	}
+
+}
+void duo(int a, int b) {
+	result[t][0] = a;
+	result[t++][1] = b;
+
+	sum += b;
+}
+int main(){
+	long long nOfCases;
+	
+	scanf("%lli", &nOfCases);
+	while(nOfCases--) {
+		memset(result, 0, sizeof(result));
+		sum = 0;
+		t = 0;
+		scanf("%d", &n);
+		int i = 0;
+		int temp_n = n;
+		while (temp_n) {
+			scanf("%d", &people[i]);
+			i++;
+			temp_n--;
+		}
+
+		qsort(people, n, sizeof(int), (int(*) (const void *, const void *)) comp);
+
+		
+		int l_m = people[0], r_m = people[1];
+		int k = 2;
+		if ((n) % 2 == 0) {
+			duo(l_m, r_m);
+		}
+		else
+		{
+			duo(l_m, r_m);
+
+			result[t++][0] = l_m;
+			sum += l_m;
+
+			result[t][0] = l_m;
+			result[t++][1] = people[2];
+			sum += people[2];
+			k++;
+		}
+		
+		for (int g = k; g < n; g+=2)
+		{
+			result[t++][0] = l_m;
+			sum += l_m;
+			trio(l_m, r_m, people[g], people[g+1]);
+
+		}
+		///
+		printf("%d\n",sum);
+		for (int z = 0; result[z][0] != 0; z++)
+		{
+			printf("%d", result[z][0]);
+			if (result[z][1] != 0)
+				printf(" %d", result[z][1]);
+			printf("\n");
+		}
+		if(nOfCases)
+		printf("\n");
+	}
+	return 0;
+}
+
+
