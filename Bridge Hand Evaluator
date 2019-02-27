@@ -1,0 +1,130 @@
+#include <stdio.h>
+#include <cstring>
+char hand[13 * 3];
+int points;
+int s;
+int h;
+int d;
+int c;
+int stopped[4];
+int trump[4];
+void get_input() {
+
+	while (scanf("%s",hand)) {
+		if (hand[0] == '\n')
+			continue;
+		 points = 0;
+		 s = 0;
+		 h = 0;
+		 d = 0;
+		 c = 0;
+		 memset(stopped, 0, sizeof stopped);
+		 memset(trump, 0, sizeof trump);
+
+		for (int i = 1; i < 13 * 3; i+=3)
+		{
+			switch (hand[i])
+			{
+				case 'S': s++;break;
+				case 'H': h++;break;
+				case 'D': d++;break;
+				case 'C': c++;break;
+			}
+		}
+		for (int i = 0; i < 13 * 3; i += 3)
+		{
+			switch (hand[i])
+			{
+			case 'A': points += 4;
+				switch (hand[i + 1])
+				{
+				case 'S': stopped[0] = 1;break;
+				case 'H': stopped[1] = 1;break;
+				case 'D': stopped[2] = 1;break;
+				case 'C': stopped[3] = 1;break;
+				}
+				break;
+
+			case 'K': points += 3;
+				switch (hand[i+1])
+				{
+				case 'S': if (s == 1)points--; if (s > 2)stopped[0] = 1;break;
+				case 'H': if (h == 1)points--;if (h > 2)stopped[1] = 1;break;
+				case 'D': if (d == 1)points--;if (d > 2)stopped[2] = 1;break;
+				case 'C': if (c == 1)points--;if (c > 2)stopped[3] = 1;break;
+				}
+				break;
+
+			case 'Q': points += 2;
+				switch (hand[i + 1])
+				{
+				case 'S': if (s == 1 || s == 2)points--;if (s > 2)stopped[0] = 1;break;
+				case 'H': if (h == 1 || h == 2)points--;if (h > 2)stopped[1] = 1;break;
+				case 'D': if (d == 1 || d == 2)points--;if (d > 2)stopped[2] = 1;break;
+				case 'C': if (c == 1 || c == 2)points--;if (c > 2)stopped[3] = 1;break;
+				}
+				break;
+
+			case 'J': points += 1;
+				switch (hand[i + 1])
+				{
+				case 'S': if (s == 1 || s == 2 || s == 3)points--;break;
+				case 'H': if (h == 1 || h == 2 || h == 3)points--;break;
+				case 'D': if (d == 1 || d == 2 || d == 3)points--;break;
+				case 'C': if (c == 1 || c == 2 || c == 3)points--;break;
+				}
+				break;
+			}
+		}
+
+		switch (s)
+		{
+		case 2: points++; trump[0] = 1;break;
+			case 1: points += 2;trump[0] = 1;break;
+			case 0: points += 2;trump[0] = 1;break;
+		}
+		switch (h)
+		{
+		case 2: points++;trump[1] = 1; break;
+		case 1: points += 2;trump[1] = 1;break;
+		case 0: points += 2;trump[1] = 1;break;
+		}
+		switch (d)
+		{
+		case 2: points++;trump[2] = 1; break;
+		case 1: points += 2;trump[2] = 1;break;
+		case 0: points += 2;trump[2] = 1;break;
+		}
+		switch (c)
+		{
+		case 2: points++;trump[3] = 1; break;
+		case 1: points += 2;trump[3] = 1;break;
+		case 0: points += 2;trump[3] = 1;break;
+		}
+
+		if (points < 14) {
+			printf("PASS");
+			continue;
+		}
+		if (points >= 16 && trump[0] == 0 && trump[1] == 0 &&
+			trump[2] == 0 && trump[3] == 0 && stopped[0] == 1 &&
+			stopped[1] == 1 && stopped[2] == 1 && stopped[3] == 1) {
+			printf("BID NO-TRUMP"); continue;
+		}
+		else
+		{
+			char ch_max = 'S';
+			int max = s;
+			if (h > max)
+				max = h, ch_max = 'H';
+			if (d > max)
+				max = d, ch_max = 'D';
+			if (c > max)
+				max = h, ch_max = 'C';
+				
+			printf("BID %c", ch_max);
+		}
+		printf("\n");
+	}
+
+}
