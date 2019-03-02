@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <cstring>
+#include <iostream>
+#include <fstream>
+using namespace std;
+int CardToDigit(char ch) {
+	int d;
+	switch (ch)
+	{
+		case 'A': d = 10;break;
+		case 'Q': d = 10;break;
+		case 'T': d = 10;break;
+		case 'K': d = 10;break;
+		case 'J': d = 10;break;
+		default:
+			d = ch - '0';break;
+	}
+	return d;
+}
+int main()
+{
+
+	ofstream myfile;
+	myfile.open("example.txt");
+
+	char pile[52 * 3 + 1];
+	
+	int n, c = 1;
+	scanf("%d\n", &n);
+
+	while (n--) {
+
+		if(n)
+			fgets(pile, 52 * 3+1, stdin);
+		else {
+		
+			fgets(pile, 52 * 3, stdin);
+			
+		}
+
+		int i = 78;
+		int y = 0;
+		for (int k = 0; k < 3; k++)
+		{
+			int x = CardToDigit(pile[i]);
+			y += x;
+			
+			i = i - 1*3 - (10 - x)*3;
+		
+		}
+		int j = 0;
+		for (int g = 0; g < y-2; g++)
+		{
+			if (j == i)
+				j = 81;
+			j += 3;
+			
+
+		}
+		//printf("Case %d: %c%c",c, pile[j], pile[j+1]);
+		myfile << "Case " << c << ":" << " " << pile[j] << pile[j + 1] << endl;
+			//printf("\n");
+		c++;
+	}
+	
+
+	myfile.close();
+    return 0;
+}
+
