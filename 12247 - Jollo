@@ -1,0 +1,95 @@
+#include <stdio.h>
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+int p[3], k[2];
+
+void  bubble_sort(int * arr, int start, int end) {
+
+	int temp;
+	for (int i = start; i < end; i++)
+	{
+		for (int j = start; j < end; j++)
+		{
+			if (arr[j] > arr[j + 1])
+			{
+				temp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = temp;
+			}
+		}
+	}
+}
+int find_min() {
+	int min = 1;
+	int q = 0;
+	for (int i = 0;(i < 3 && min == p[q++]); i++)
+	{
+		min++;
+	}
+	q = 0;
+	for (int i = 0;(i < 2 && min == k[q++]); i++)
+	{
+		min++;
+	}
+	return min;
+}
+int find_great(int x) {
+	do {
+
+		x++;
+		if (x == 53)
+			return -1;
+
+	} while ((x == k[0]) || (x == k[1]) ||(x == p[2]));
+	return x;
+}
+
+int main() {
+
+	ofstream result_file;
+	result_file.open("result.txt");
+	result_file.clear();
+
+	while (scanf("%d %d %d %d %d", &p[0], &p[1], &p[2], &k[0], &k[1])) {
+		if (p[0] == 0)
+			break;
+		bubble_sort(p, 0, 2);bubble_sort(k, 0, 1);
+		int f = 0, s = 0;
+		for (int i = 0; i < 3; i++)
+			for (int j = 0; j < 2; j++) {
+				if (j == 0)
+					if (p[i] > k[j])f++;
+				if (j == 1)
+					if (p[i] > k[j])s++;
+			}
+							
+		if((f >= 1 && s > 1) || (f > 1 && s >= 1)){
+			result_file << "-1" << endl;
+			//printf("-1\n");
+			continue;
+		}
+
+		if (f == 0 && s == 0) {
+			result_file << find_min() << endl;
+			//printf("%d\n", find_min());
+			continue;
+		}
+			
+		if ((f == 1 && s == 1) || (f == 1 && s == 0) || (f == 0 && s == 1)) {
+			result_file << find_great(p[1]) << endl;
+			//printf("%d\n",find_great(p[1]));
+			continue;
+		}
+		
+		result_file << find_great(p[2]) << endl;
+		//printf("%d\n", find_great(p[2]));
+		
+		
+	}
+
+	result_file.close();
+	return 0;
+}
