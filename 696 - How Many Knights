@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+int Knight(int m, int n) {
+	if (m == 0 || n == 0)
+		return 0;
+	if (m == 1 || n == 1)
+		return m * n;
+	if (m == 2 || n == 2)
+	{
+		if(m == 2 && n == 2)
+			return m  * n;
+		if (m == 2)
+			return (n % 2) ? n + 1 : ((n/2 % 2) ? n + 2 : n);
+		else
+			return (m % 2) ? m + 1 : ((m/2 % 2) ? m + 2 : m);
+				
+
+	}
+	if (m % 2 == 0)
+	{
+
+		return m / 2 * n;
+	}
+	else
+	{
+		return (m / 2 + 1)*((n % 2) ? n / 2 + 1 : n / 2) + (n / 2) *(m / 2);
+
+	}
+}
+int main() {
+	ofstream file;
+	file.open("some.txt");
+	file.clear();
+
+	int m, n;
+	while (scanf("%d %d",&m,&n)) {
+		if (m == 0 && n == 0)
+			break;
+		//printf("%d knights may be placed on a %d row %d column board.\n",
+			//Knight(m, n), m, n);
+		file << Knight(m, n) << " knights may be placed on a " << m << " row " << n << " column board." << endl;
+	}
+	file.close();
+	return 0;
+}
