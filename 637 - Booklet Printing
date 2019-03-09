@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <math.h>
+#include <cmath>
+#include <iostream>
+//#include <fstream>
+
+using namespace std;
+
+int main() {
+	//ofstream file;
+	//file.open("kek.txt");
+	//file.clear();
+	int n;
+	while (scanf("%d", &n) && n) {
+
+		int x = 4 * ceil((float)n / 4);
+		int c = 1;
+		int sheet = 1;
+		cout << "Printing order for " << n << " pages:" << endl;
+
+		//printf("Printing order for %d pages:\n", n);
+		int t = n;
+		while (t > 0) {
+
+			for (int i = 0; i < 2; i++)
+			{
+				if (i % 2) {
+					if (t > 0) {
+						if (x <= n)
+							cout<< "Sheet " << sheet << ", back : " << c++ << ", " << x-- << endl, t -= 2;
+						//printf("Sheet %d, back: %d, %d\n", sheet, c++, x--), t -= 2;
+						else
+							cout << "Sheet " << sheet << ", back : " << c++ << ", " << "Blank" << endl, t --, x--;
+							//printf("Sheet %d, back: %d, Blank\n", sheet, c++), x--, t--;
+					}
+					
+					//printf("Sheet %d, front: Blank, Blank\n", sheet);
+				}
+				else {
+					
+					if (x <= n)
+						cout << "Sheet " << sheet << ", front: " << x-- << ", " << c++ << endl, t -= 2;
+					//printf("Sheet %d, front: %d, %d\n", sheet, x--, c++), t -= 2;
+					else
+						cout << "Sheet " << sheet << ", front: " << "Blank" << ", " << c++ << endl, t --, x--;
+							//printf("Sheet %d, front: Blank, %d\n", sheet, c++), x--, t--;
+					
+					
+				}
+			}
+			sheet++;
+		}
+	
+	}
+	//file.close();
+	return 0;
+}
