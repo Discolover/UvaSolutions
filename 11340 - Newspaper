@@ -1,22 +1,22 @@
-//wrong answer anyway!!!
+//be aware that char range is -128 - 127 !!!
 #include <stdio.h>
 #include <cstring>
-#include <iostream>
-#include <fstream>
+//#include <iostream>
+//#include <fstream>
 
-using namespace std;
+//using namespace std;
 
-long long dat[256];
+long long dat[258];
 int main() {
-	ofstream fil;
-	fil.open("meme.txt");
-	fil.clear();
+	//ofstream fil;
+	//fil.open("meme.txt");
+	//fil.clear();
 	int N;
 	scanf("%d", &N);
 	while (N--) {
 
 		memset(dat, 0, sizeof dat);
-		long long dollars = 0;
+		//long long dollars = 0;
 		long long cents = 0;
 
 		int k;
@@ -25,33 +25,25 @@ int main() {
 			char ch;
 			long long val;
 			scanf("\n%c %lli", &ch, &val);
-			dat[ch] = val;
+			dat[ch+128] = val;
 		}
 		int m;
 		scanf("%d\n", &m);
 		while (m--) {
-			
-			char charc;
-			//10000 with or without \n
-			while (charc = getc(stdin)) {
-				if (charc == '\n')
+			char c;
+			while (c = getc(stdin)) {
+				if (c == '\n')
 					break;
-				cents += dat[charc];
-
-				long long x = cents / 100;
-				dollars += x;
-				cents -= x * 100;
+				cents += dat[c+128];
 			}
 
 		}
-		if (cents > 9)
-			fil << dollars << "." << cents << "$" << endl;
-			//printf("%ld.%d$\n", dollars, cents);
-		else 
-			fil << dollars << ".0" << cents << "$" << endl;
-			//printf("%ld.0%d$\n", dollars, cents);
+		
+			//fil << dollars << "." << cents << "$" << endl;
+			printf("%lld.%02d$\n", cents/100, cents%100);
+
 	}
-	fil.close();
+	//fil.close();
 	return 0;
 }
 
