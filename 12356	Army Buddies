@@ -1,0 +1,92 @@
+#include <stdio.h>
+#include <cstring>
+//#include <iostream>
+#include <vector>
+#include <stdlib.h>
+
+//#include <fstream>
+
+using namespace std;
+typedef struct {
+	int l;
+	int val;
+	int r;
+}buddies;
+int first, last;
+vector<buddies> army;
+
+//ofstream file;
+
+void fill_with_neighbors(int s) {
+
+	for (int i = 0; i < s + 1; i++)
+	{
+		buddies * b = (buddies *)malloc(sizeof(buddies));
+		b->l = i - 1;
+		b->r = i + 1;
+		b->val = i;
+		army.push_back(*b);
+	}
+	first = 1;
+	last = s;
+	army[s].r = 0;
+}
+
+void kill_them_ALL(int l, int r) {
+
+	if (l == first)
+		first = army[r].r, army[l].l = 0;
+	else
+		army[army[l].l].r = army[r].r;
+	if (r == last)
+		last = army[l].l, army[r].r = 0;
+	else
+		army[army[r].r].l = army[l].l;
+
+
+}
+void show(int l, int r) {
+	if (!army[l].l && !army[r].r) {
+		//fil << "* *" << endl;
+		printf("* *\n");
+		return;
+	}
+	if (!army[l].l || !army[r].r)
+	{
+		if (army[l].l)
+			printf("%d *\n", army[l].l);
+		//file << army[l].l << " *" << endl;
+		else
+			//file << "* " << army[r].r << endl;
+			printf("* %d\n", army[r].r);
+	}
+	else
+		//file << army[l].l << " " << army[r].r << endl;
+		printf("%d %d\n", army[l].l, army[r].r);
+
+}
+int main() {
+
+	//file.open("meme.txt");
+	//file.clear();
+
+	int s, b;
+	while (scanf("%d %d", &s, &b) && (s || b)) {
+		army.clear();
+		fill_with_neighbors(s);
+		while (b--) {
+
+			int l, r;
+			scanf("%d %d", &l, &r);
+			kill_them_ALL(l, r);
+			show(l, r);
+
+
+		}
+		//file << "-" << endl;
+		printf("-\n");
+	}
+	//fil.close();
+	return 0;
+}
+
