@@ -1,0 +1,120 @@
+#include <stdio.h>
+#include <stdlib.h>
+//#include <fstream>
+//#include <iostream>
+
+//using namespace std;
+
+void rotate90(int *** arr, int row, int column) {
+	int** rot= new int*[column];
+	for (int i = 0; i < column; i++)
+		rot[i] = new int[row];
+	for (int i = 0,q = 0; i < column; i++,q++)
+		for (int j = row-1, k = 0; j >= 0; j--,k++)
+			rot[q][k] = (*arr)[j][i];
+
+	for (int i = 0; i < row; i++)
+	{
+		delete (*arr)[i];
+	}
+	delete *arr;
+	*arr = rot;
+}
+bool helper(int i, int j,int s,int ** small ,int ** big) {
+
+	for (int k = 0; k < s; k++)
+	{
+		
+		for (int q = 0; q < s; q++)
+		{
+			if (small[k][q] != big[i + k][j + q])
+				return false;
+		}
+	}
+	return true;
+}
+int count(int ** big,int b , int ** small,int s) {
+	int cnt = 0;
+	for (int i = 0; i < b - s + 1; i++)
+	{
+		for (int j = 0; j < b - s + 1; j++)
+		{
+			if (big[i][j] == small[0][0]) {
+				if (helper(i, j, s, small, big))
+					cnt++;
+			}
+		}
+	}
+	return cnt;
+}
+int main() {
+	//ofstream file;
+	//file.open("hope.txt");
+	//file.clear();
+	int** big,** small;
+	int N, n, tN, tn;
+	while (scanf("%d %d", &N, &n) && (N || n)) {
+		tN = N;tn = n;
+		big = new int*[N];
+		for (int i = 0; i < N; i++)
+			big[i] = new int[N];
+
+		small = new int*[n];
+		for (int i = 0; i < n; i++)
+			small[i] = new int[n];
+		scanf("\n");
+		int k = 0, z = 0;
+		while (tN--) {
+			z = 0;
+			char ch;
+			while (ch = getc(stdin) /*&& ch != '\n'*/)
+			{
+				if (ch == '\n')
+					break;
+				big[k][z++] = ch;
+			}
+			k++;
+		}
+		k = 0, z = 0;
+		while (tn--) {
+			z = 0;
+			char ch;
+			while (ch = getc(stdin) /*&& ch != '\n'*/)
+			{
+				if (ch == '\n')
+					break;
+				small[k][z++] = ch;
+			}
+			k++;
+		}
+		///
+		printf("%d",count(big, N, small, n));
+		//file << count(big, N, small, n);
+		///
+		rotate90(&small, n, n);
+		printf(" %d", count(big, N, small, n));
+		//file <<" "  << count(big, N, small, n);
+		///
+		rotate90(&small, n, n);
+		//file << " " << count(big, N, small, n);
+		printf(" %d", count(big, N, small, n));
+		///
+		rotate90(&small, n, n);
+		//file << " " << count(big, N, small, n) << endl;
+		printf(" %d\n", count(big, N, small, n));
+		for (int i = 0; i < N; i++)
+		{
+			delete big[i];
+		}
+		delete big;
+		for (int i = 0; i < n; i++)
+		{
+			delete small[i];
+		}
+		delete small;
+		///
+	}
+	//file.close();
+	return 0;
+}
+
