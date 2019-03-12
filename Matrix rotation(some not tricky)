@@ -1,0 +1,54 @@
+#include <stdio.h>
+//working function
+//time complexity O(columns + rows * columns + rows)(or O(columns * rows))
+//space O( (columns * rows)^2)
+//arr*** poiter to a matrix to rotate
+//row, column: n of rows and n of columns in initial matrix, respectively
+void rotate90(int *** arr, int row, int column) {
+	int** rot= new int*[column];
+	for (int i = 0; i < column; i++)
+		rot[i] = new int[row];
+	for (int i = 0,q = 0; i < column; i++,q++)
+		for (int j = row-1, k = 0; j >= 0; j--,k++)
+			rot[q][k] = (*arr)[j][i];
+
+	for (int i = 0; i < row; i++)
+	{
+		delete (*arr)[i];
+	}
+	delete *arr;
+	*arr = rot;
+}
+int main() {
+	
+	int n = 6;
+	int m = 6;
+	int** arr = new int*[n];
+	for (int i = 0; i < n; ++i)
+		arr[i] = new int[m];
+
+  //for testing
+	int val = 1;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			arr[i][j] = val++, printf("%d ", arr[i][j]);
+		}
+		printf("\n");
+	}
+  printf("\n");
+  
+  //tests
+	rotate90(&arr, n, m);
+	show(arr, m, n);
+	rotate90(&arr, n, m);
+	show(arr, m, n);
+	rotate90(&arr, n, m);
+	show(arr, m, n);
+	rotate90(&arr, n, m);
+	show(arr, m, n);
+
+	return 0;
+}
+
