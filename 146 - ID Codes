@@ -1,0 +1,39 @@
+#include <stdio.h>
+//#include <cstring>
+#include <math.h>
+#include <cmath>
+#include <stdlib.h>
+#include <fstream>
+#include <iostream>
+#include <algorithm>
+int main() {
+
+	char code[52];
+	while (fgets(code, 52, stdin) && code[0] != '#') {
+		int size = 0;
+		for (int i = 0; i < 50; i++)
+		{
+			if (code[i] == '\n')
+				break;
+
+				size++;
+		}
+		if (next_permutation(code, code + size))
+			for (int i = 0; i < size; i++)
+			{
+				printf("%c", code[i]);
+				
+			}
+		else {
+			
+			printf("No Successor");
+		}
+		printf("\n");
+		
+	}
+
+	
+	//file.close();
+	return 0;
+}
+
