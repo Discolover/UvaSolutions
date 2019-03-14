@@ -1,0 +1,32 @@
+#include <stdio.h>
+//#include <cstring>
+#include <vector>
+#include <fstream>
+#include <iostream>
+#include <algorithm>
+#include <math.h> 
+#include <cmath>
+using namespace std;
+vector<long long> series;
+
+int main() {
+	ofstream file;
+	file.open("skidada.txt");
+	file.clear();
+	long long x;
+	while (scanf("%lld", &x) != EOF) {
+		series.push_back(x);
+		nth_element(series.begin(), series.begin() + series.size() / 2, series.end());
+		if (series.size() % 2)
+			file << series[series.size() / 2] << endl;
+		else {
+			long long t = series[series.size() / 2];
+			nth_element(series.begin(), series.begin() + series.size() / 2 - 1, series.end());
+			file << (series[series.size() / 2 - 1] + t) / 2 << endl;
+		}
+	}
+	
+	file.close();
+	return 0;
+}
+
