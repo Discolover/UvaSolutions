@@ -1,0 +1,59 @@
+
+// 1 << N  == pow(2, N)
+#include <stdio.h>
+#include <cmath>
+#include <math.h>
+#include <vector>
+
+
+//#include <iostream>
+//#include <fstream>
+
+using namespace std;
+
+vector<int> weights;
+vector<int> potencies;
+int main() {
+
+	/*ofstream stream;
+	stream.open("yolo.txt");
+	stream.clear();*/
+	int n;
+	while (scanf("%d", &n) != EOF) {
+
+		//2, 4,8,16 n < 4
+		weights.clear();
+		potencies.clear();
+		int t = 1 << n;
+		while (t--) {
+
+			int w;
+			scanf("%d", &w); weights.push_back(w);
+		}
+			//compute potency of each vertex
+			for (int corner = 0;corner < 1 << n; corner++)
+			{
+				int potency = 0;
+				for (int j = 0; j < n; j++)
+				{
+					potency += weights[corner ^ (1 << j)];
+				}
+				potencies.push_back(potency);
+			}
+			//find max sum of 2s potencies
+			int max = -1;
+			for (int corner = 0; corner < 1 << n; corner++)
+			{
+				for (int i = 0; i < n; i++)
+				{
+					if (potencies[corner] + potencies[corner ^ (1 << i)] > max)
+						max = potencies[corner] + potencies[corner ^ (1 << i)];
+				}
+			}
+			printf("%d\n", max);
+			//stream << max << endl;
+		
+	}
+	//stream.close();
+	return 0;
+}
