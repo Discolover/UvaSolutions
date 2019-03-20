@@ -1,0 +1,133 @@
+#include <stdio.h>
+
+#include <bitset>
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+bitset<1000001> starts;
+bitset<1000001> finishes;
+bitset<1000001> calendar;
+bitset<1000001> temp;
+bitset<1000001> copy_temp;
+bitset<1000001> A_s;bitset<1000001> A_f;
+bool conflict = false;
+//int line = 1;
+//if start and finish of past and current tasks toches then do stuff...
+bool OneTimeConflict(int s, int f) {
+	temp.reset();
+	for (int i = s; i <= f; i++)
+	{
+		temp[i] = true;
+	}
+	copy_temp = temp;
+	temp = temp & calendar;//check for conflicts
+	temp ^= A_s;//check for toches
+	temp ^= A_f;
+	if (temp.none()) {
+
+		calendar |= copy_temp;
+		return false;
+
+	}
+	else
+		return true;
+}
+
+bool RepeatingTimeConflict() {
+
+	copy_temp = temp;
+	temp = temp & calendar;//check for conflicts
+	temp ^= A_s;//check for toches
+	temp ^= A_f;
+	A_s.reset(); A_f.reset();
+	if (temp.none()) {
+		calendar |= copy_temp;
+		temp = copy_temp;
+		return false;
+
+	}
+	else {
+		conflict = true;
+		return true;
+	}
+}
+int main() {
+	ofstream result;result.open("bits_madness.txt");
+	result.clear();
+	int m, n;
+	while (scanf("%d %d", &n, &m) && (m || n)) {
+
+		calendar.reset();
+		starts.reset(); finishes.reset();
+		conflict = false;
+		//start and finishes, finishes and starts
+		while (n--) {
+			//cout << (conflict ? "conflict" : "no conflict ") << endl;
+			int s, f;
+			scanf("%d %d", &s, &f);
+			if (conflict)
+				continue;
+			A_s.reset();A_f.reset();
+			A_s[s] = true;A_f[f] = true;
+
+			A_s &= finishes;
+			A_f &= starts;
+
+			starts[s] = true;finishes[f] = true;
+
+			conflict = OneTimeConflict(s, f);
+
+
+
+
+		}
+
+		while (m--) {
+			temp.reset();
+			//cout << (conflict ? "conflict" : "no conflict ") << endl;
+
+			int s, f, r;
+			scanf("%d %d %d", &s, &f, &r);
+			if (conflict)
+				continue;
+
+			A_s.reset();A_f.reset();
+
+
+			for (int i = s; i <= f; i++)
+			{
+				temp[i] = true;
+			}
+
+			while (s < 1000001 && !conflict)
+			{
+				if (f < 1000001)
+					A_s[s] = true, A_f[f] = true, starts[s] = true, finishes[f] = true;
+				else
+					A_s[s] = true, starts[s] = true;
+
+				//for future toch detection
+				A_s &= finishes;//for this toch detection
+				A_f &= starts;
+
+				RepeatingTimeConflict();
+
+
+				temp <<= r;
+				s += r; f += r;
+			}
+		}
+
+		if (conflict) {
+			printf("CONFLICT\n");
+			result << "CONFLICT" << endl;
+		}
+		else {
+			result << "NO CONFLICT" << endl;
+			printf("NO CONFLICT\n");
+		}
+	}
+	result.close();
+	return 0;
+}
