@@ -1,0 +1,103 @@
+#include <stdio.h>
+#include <bitset>
+#include <iostream>
+using namespace std;
+bitset<101> starts;
+bitset<101> _ends;
+bitset<101> calendar;
+bool conflict = false;
+void Show() {
+	for (int j = 0; j < 10; j++)
+	{
+		for (int i = 0; i <= 9; i++)
+		{
+			printf("%d", i);
+		}
+	}
+	printf("\n");
+}
+void ShowCalendar() {
+
+	for (int i = 0; i < 101; i++)
+	{
+		int d = calendar[i];
+		printf("%d", d);
+	}
+	printf("\n");
+}
+int main() {
+	//ofstream result;//result.open("bits_madness1.txt");
+	//result.clear();
+	int m, n;
+	while (scanf("%d %d", &n, &m) && (m || n)) {
+
+		calendar.reset();
+		starts.reset(); _ends.reset();
+		conflict = false;
+		//start and finishes, finishes and starts
+		while (n--) {
+
+			int s, f;
+			scanf("%d %d", &s, &f);
+			if (conflict)
+				continue;
+			starts[s] = true;_ends[f] = true;
+			for (int i = s; i <= f; i++)
+			{
+				if (calendar[i]) {
+					if (!(i == s && _ends[s])
+						&& !(i == f && starts[f]))
+					{
+						conflict = true;
+						break;
+					}
+				}
+				calendar[i] = true;
+			}
+		}
+		Show();
+		
+		while (m--) {
+			int s, f, r;
+			scanf("%d %d %d", &s, &f, &r);
+			if (conflict)
+				continue;
+			for (s; s < 101; s += r, f += r)
+			{
+				ShowCalendar();
+				cout << ((conflict) ? "Conflict" : "No conflict") << endl;
+				if (f > 100)
+					f = 100;
+				starts[s] = true;_ends[f] = true;
+				for (int i = s; i <= f; i++)
+				{
+					if (calendar[i]) {
+						if (!(i == s && _ends[s])
+							&& !(i == f && starts[f]))
+						{
+							conflict = true;
+							break;
+						}
+					}
+					calendar[i] = true;
+				}
+				ShowCalendar();
+				cout << ((conflict) ? "Conflict" : "No conflict") << endl;
+				if (conflict)
+					break;
+			}
+		}
+
+
+		if (conflict) {
+			printf("CONFLICT\n");
+			//result << "CONFLICT" << endl;
+		}
+		else {
+			//result << "NO CONFLICT" << endl;
+			printf("NO CONFLICT\n");
+		}
+	}
+	//result.close();
+	return 0;
+}
