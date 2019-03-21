@@ -1,0 +1,79 @@
+// not AC
+#include <stdio.h>
+#include <bitset>
+using namespace std;
+bitset<1000001> starts;
+bitset<1000001> _ends;
+bitset<1000001> calendar;
+bool conflict = false;
+
+int main() {
+	//ofstream result;//result.open("bits_madness1.txt");
+	//result.clear();
+	int m, n;
+	while (scanf("%d %d", &n, &m) && (m || n)) {
+
+		calendar.reset();
+		starts.reset(); _ends.reset();
+		conflict = false;
+		//start and finishes, finishes and starts
+		while (n--) {
+
+			int s, f;
+			scanf("%d %d", &s, &f);
+			if (conflict)
+				continue;
+			starts[s] = true;_ends[f] = true;
+			for (int i = s; i <= f; i++)
+			{
+				if (calendar[i]) {
+					if (!(i == s && _ends[s])
+						&& !(i == f && starts[f]))
+					{
+						conflict = true;
+						break;
+					}
+				}
+				calendar[i] = true;
+			}
+		}
+		while (m--) {
+			int s, f, r;
+			scanf("%d %d %d", &s, &f, &r);
+			if (conflict)
+				continue;
+			for (s; s < 1000001; s += r, f += r)
+			{
+				if (f > 1000000)
+					f = 1000000;
+				starts[s] = true;_ends[f] = true;
+				for (int i = s; i <= f; i++)
+				{
+					if (calendar[i]) {
+						if (!(i == s && _ends[s])
+							&& !(i == f && starts[f]))
+						{
+							conflict = true;
+							break;
+						}
+					}
+					calendar[i] = true;
+				}
+				if (conflict)
+					break;
+			}
+		}
+
+
+		if (conflict) {
+			printf("CONFLICT\n");
+			//result << "CONFLICT" << endl;
+		}
+		else {
+			//result << "NO CONFLICT" << endl;
+			printf("NO CONFLICT\n");
+		}
+	}
+	//result.close();
+	return 0;
+}
