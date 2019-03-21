@@ -8,8 +8,7 @@ bitset<1000001> calendar;
 bool conflict = false;
 
 int main() {
-	//ofstream result;//result.open("bits_madness1.txt");
-	//result.clear();
+
 	int m, n;
 	while (scanf("%d %d", &n, &m) && (m || n)) {
 
@@ -46,16 +45,11 @@ int main() {
 			{
 				if (f > 1000000)
 					f = 1000000;
-				starts[s] = true;_ends[f] = true;
-				for (int i = s; i <= f; i++)
+				for (int i = s; i < f; i++)
 				{
 					if (calendar[i]) {
-						if (!(i == s && _ends[s])
-							&& !(i == f && starts[f]))
-						{
-							conflict = true;
-							break;
-						}
+						conflict = true;
+						break;
 					}
 					calendar[i] = true;
 				}
@@ -67,10 +61,8 @@ int main() {
 
 		if (conflict) {
 			printf("CONFLICT\n");
-			//result << "CONFLICT" << endl;
 		}
 		else {
-			//result << "NO CONFLICT" << endl;
 			printf("NO CONFLICT\n");
 		}
 	}
