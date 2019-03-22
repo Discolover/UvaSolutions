@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <list>
+
+using namespace std;
+
+list<char> text;
+auto it = text.end();
+
+void show() {
+	for (auto i : text)
+		printf("%c", i);
+	printf("\n");
+}
+
+void reset() {
+	text.clear();
+	it = text.end();
+}
+
+int main() {
+
+	char ch;
+	while (ch = getc(stdin)) {
+		if (ch == EOF)
+			break;
+		if (ch == '\n') {
+			show();
+			reset();
+			continue;
+		}
+		///
+		if (ch == '[') {
+			it = text.begin();
+			continue;
+		}
+		if (ch == ']') {
+			it = text.end();
+			continue;
+		}
+		text.insert(it, ch);
+		///
+	}
+	return 0;
+}
