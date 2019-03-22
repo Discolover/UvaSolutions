@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stack>
+#include <string>
+#include <vector>
+using namespace std;
+//stack<char> container;
+string target;
+void PrintOps(vector<int> operators) {
+
+	for (int i = 0; i < operators.size(); i++)
+	{
+		printf("%c ", (operators[i]) ? 'i' : 'o');
+	}
+	printf("\n");
+}
+void helper_solve() {
+
+
+
+}
+void solve(string source, int pos, stack<char> container, vector<int> ops) {
+	if (container.empty() && source.empty()) {
+		PrintOps(ops);
+	}
+
+	//stack part
+	if (!container.empty()) {
+		if (container.top() == target[pos]) {
+			char ch = container.top();
+			container.pop();
+			ops.push_back(0);
+			solve(source, ++pos, container, ops);
+			//backtrack
+			ops.erase(ops.end() - 1);
+			pos--;
+			container.push(ch);
+		}
+	}
+	//string part
+	int x = source.length();
+	for (int i = 0; i < x ; i++) {
+		container.push(source[i]);
+		ops.push_back(1);
+		if (container.top() == target[pos]) {
+			//copies for bt
+			string copy = source;
+			char ch = container.top();
+			//
+			source.erase(0, i + 1);
+			container.pop();
+			ops.push_back(0);
+			solve(source, ++pos, container, ops);
+			
+			
+			//backtrack!!!
+			container.push(ch);
+			ops.erase(ops.end() - 1);
+			pos--;
+			source = copy;
+			//
+		}
+	}
+	return;
+}
+
+
+int main() {
+
+	string s = "apple";
+	target = "bahama";
+	
+	vector<int> op_seqs;
+	stack<char> st;
+	solve(s, 0, st, op_seqs);
+
+	return 0;
+}
