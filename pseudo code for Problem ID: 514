@@ -1,0 +1,67 @@
+
+Stack station, B;
+order[]
+
+GetInput();
+
+	order[] = Input.CorrespondLine
+	//order[] = {1,4,3,2,5}
+	B = FillWithElementsFrom1to(Input.N);
+	//N = 5, N = {1,2,3,4,5}
+	
+	foreach elem in order
+		
+		if B.contain(elem) then
+			B.pop and station.push(B[i]) until elem is poped(and pushed) too
+		
+		if station.pop != elem
+			then print "No"
+		
+		if B.exhausted then print "Yes"
+
+
+
+							
+		//1 in the B => B.pop(1), station.pop == elem = > OK	
+		//4 in the B => B.pop(2,3,4), station.pop == elem => OK
+		//3 not in the B, station.pop == elem => OK
+		//2 not in the B, station.pop == elem => OK
+		//5 in the B => B.pop(5), station.pop == elem => OK
+		//B is empty; stop()
+		
+		
+	head = 1
+	Exist(int val){
+		return val >= head;
+	}
+		
+		
+	
+		
+		
+	for i to val
+		b.pop() and station.push()
+		
+	head = val
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
