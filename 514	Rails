@@ -1,0 +1,95 @@
+#include <stdio.h>
+#include <stack>
+#include <vector>
+
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+stack<int> B;
+stack<int> _b;
+stack<int> station;
+vector<int> order;
+int head;
+
+void ClearStack(stack<int> * st) {
+	while (!(*st).empty())
+		(*st).pop();
+}
+void FillStack(int N) {
+	for (int i = N; i >= 1; i--)
+	{
+		B.push(i);
+	}
+}
+bool ExistInB(int val) {
+	return val >= head;
+}
+
+int main() {
+	ofstream stream;stream.open("lululu.txt");stream.clear();
+
+	int N;
+	while (scanf("%d",&N) && N){
+
+		//fill b;
+		ClearStack(&B);
+		FillStack(N);
+		//fil order
+		int t, val;
+		while (true) {
+
+			t = N;
+			order.clear();
+			ClearStack(&station);
+			while (t--  && scanf("%d", &val) && val) {
+				order.push_back(val);
+			}
+			if (!val)
+				break;
+
+			_b = B;
+
+			//
+			head = 1;
+			for (int i = 0; i < order.size(); i++)
+			{
+				int x = 0;
+				if (ExistInB(order[i]))
+				{
+					
+					while (x != order[i]) {
+						x = _b.top();
+						_b.pop();
+						station.push(x);
+					}
+					head = x + 1;
+
+				}
+				if (station.top() != order[i])
+				{
+					printf("No\n");
+
+					stream << "No" << endl;
+					
+					break;
+				}
+				station.pop();
+			}
+			if (_b.empty() && station.empty()) {
+
+
+				stream << "Yes" << endl;
+
+				printf("Yes\n");
+
+			}
+			//
+
+		}
+		printf("\n");
+		stream << endl;
+	}
+	stream.close();
+	return 0;
+}
