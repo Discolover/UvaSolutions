@@ -1,0 +1,161 @@
+#include <stdio.h>
+#include <stack>
+#include <string>
+#include <vector>
+#include <cstring>
+#include <iostream>
+using namespace std;
+//stack<char> container;
+
+//to do:
+//1. Histogram for precheck for anagram << 
+//2. Compare result with other implementation (generate more tricky input)
+//3. Change order of exploring(backtracking)(something that i am scare)
+//4. Uva - AC
+
+
+string target;
+//vector<vector<char>> sorry_for_this;
+
+
+vector<vector<char>> sorry_for_this;
+void PrintOps() {
+
+	for (int i = sorry_for_this.size() - 1; i >= 0; i--)
+	{
+		for (int j = 0; j < sorry_for_this[i].size(); j++)
+		{
+			printf("%c", sorry_for_this[i][j]);
+			if (j + 1 < sorry_for_this[i].size())
+				printf(" ");
+		}
+		printf("\n");
+	}
+	sorry_for_this.clear();
+}
+
+void PrintOps(vector<char> operations) {
+	for (int i = 0; i < operations.size(); i++)
+	{
+		printf("%c", operations[i]);
+		if (i + 1 < operations.size())
+			printf(" ");
+	}
+	printf("\n");
+}
+
+void solve(string source, int pos, stack<char> container, vector<char> ops) {
+	if (container.empty() && source.empty()) {
+		sorry_for_this.push_back(ops);
+		return;
+	}
+
+	//stack part
+	if (!container.empty()) {
+		if (container.top() == target[pos]) {
+			char ch = container.top();
+			container.pop();
+			ops.push_back('o');
+			solve(source, ++pos, container, ops);
+			//backtrack
+			ops.erase(ops.end() - 1);
+			pos--;
+			container.push(ch);
+		}
+	}
+	//string part
+	int x = source.length();
+	for (int i = 0; i < x ; i++) {
+		container.push(source[i]);
+		ops.push_back('i');
+		if (container.top() == target[pos]) {
+			//copies for bt
+			string copy = source;
+			char ch = container.top();
+			//
+			source.erase(0, i + 1);
+			container.pop();
+			ops.push_back('o');
+			solve(source, ++pos, container, ops);
+			
+			
+			//backtrack!!!
+			container.push(ch);
+			ops.erase(ops.end() - 1);
+			pos--;
+			source = copy;
+			//
+		}
+	}
+	return;
+}
+void helper_solve(string source) {
+
+	stack<char> st;
+	vector<char> operations;
+	solve(source, 0, st, operations);
+
+}
+int histogram[256];
+int _size = 0;
+void CheckSourceLetter(char s) {
+	if (histogram[s + 128] != 0){
+		histogram[s + 128]--;
+		_size--;
+	}
+	else{
+		histogram[s + 128]++;
+		_size++;
+	}
+}
+void CheckTargetLetter(char t) {
+	if (histogram[t + 128] != 0){
+		histogram[t + 128]--;
+		_size--;
+	}
+	else{
+		histogram[t + 128]++;
+		_size++;
+	}
+}
+bool IsAnagrams() {
+	return !_size;
+}
+
+int main() {
+	
+	//memset
+
+	char ch = '\0';
+	string source;
+	
+	while (ch != EOF) {
+		memset(histogram, 0, sizeof histogram);
+		_size = 0;
+		source.clear(); target.clear();
+		while (ch = getc(stdin)) {//what if this getc take eof?
+			if (ch == '\n')
+				break;
+			CheckSourceLetter(ch);
+			source.push_back(ch);
+		}
+		while (ch = getc(stdin)) {
+			if (ch == '\n')
+				break;
+			CheckTargetLetter(ch);
+			target.push_back(ch);
+		}
+		if (source.empty() && target.empty())
+			continue;
+		cout << "[" << endl;;
+		if (IsAnagrams()) {
+			helper_solve(source);
+			PrintOps();
+		}
+		cout << "]" << endl;
+	}
+
+	//solve(s, 0, st, op_seqs);
+
+	return 0;
+}
