@@ -1,0 +1,85 @@
+
+//i can use just std::next_permutation()  but i wont to train my backtracking solving technique
+#include <stdio.h>
+#include <string>
+#include <iostream>
+#include <algorithm>
+#include <utility>
+#include <set>
+using namespace std;
+int n;
+set<pair<string,string> > A;
+bool IsExists(string w, string s) {
+
+	return A.find(make_pair(w, s)) != A.end();
+}
+void backtrack(string word, string sol) {
+	
+	if (IsExists(word, sol))
+		return;
+	else 
+		A.emplace(make_pair(word, sol));
+	
+	/*for (int i = 0; i < bt; i++)
+	{
+		printf(" ");
+	}
+	cout << "'" << word << "'" << " " << "'" << sol << "'" << ":";
+	
+	printf("\n");*/
+	if (sol.size() == n) {
+		for (int i = 0; i < n; i++) {
+		printf("%c", sol[i]);
+		}
+		printf("\n");
+		return;
+	}
+
+	int size = word.size();
+	for (int i = 0; i < size; i++)
+	{
+		sol.push_back(word[i]);
+		char ch = word[i];
+		word.erase(word.begin() + i);
+		bt += 5;
+
+
+		backtrack(word, sol);
+		bt -= 5;
+		//backtrack
+		sol.pop_back();
+		if (word == "")
+			word.insert(word.begin() + i, ch);
+		else
+			word.insert(word.begin() + i, ch);
+		//
+	}
+	return;
+}
+
+bool comparator(char a, char b) {
+	if (tolower(a) == tolower(b)) {
+		return a < b;
+	}
+	return tolower(a) < tolower(b);
+}
+
+void permute(string word) {
+	n = word.size();
+	sort(word.begin(), word.end(),comparator);
+	A.clear();
+	backtrack(word, "");
+}
+
+int main() {
+	int nn;
+	scanf("%d", &nn);
+	string str;
+	while (nn--)
+	{
+		cin >> str;
+		permute(str);
+	}
+
+	return 0;
+}
