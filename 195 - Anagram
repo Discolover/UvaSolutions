@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <string>
+#include <iostream>
+using namespace std;
+int n;
+int _count = 0;
+int l;
+int bt = 0;
+void backtrack(string word,string sol) {
+	///
+	for (int i = 0; i < bt; i++)
+	{
+		printf(" ");
+	}
+	cout << "'" << word << "'" << " " << "'" << sol << "'" << ":";
+	///
+	printf("\n");
+
+	if (sol.size() == n) {
+		///
+		/*for (int i = 0; i < bt * 2; i++)
+		{
+			printf(" ");
+		}
+		///
+		printf("%d:", _count++);
+		
+		for (int i = 0; i < n; i++) {
+			printf("%c", sol[i]);if (i + 1 < n) printf(" ");
+		}
+		printf("\n");*/
+		return;
+	}
+
+	int size = word.size();
+	for (int i = 0; i < size; i++)
+	{
+		sol.push_back(word[i]);
+		char ch = word[i];
+		word.erase(word.begin() + i);
+		bt+=5;
+		backtrack(word, sol);
+		bt-=5;
+		//backtrack
+		sol.pop_back();
+		if (word == "")
+			word.insert(word.begin() + i, ch);
+		else 
+			word.insert(word.begin() + i , ch);
+		//
+	}
+	return;
+}
+
+
+void permute(string word) {
+	n = word.size();
+	backtrack(word, "");
+}
+
+int main() {
+
+	permute("acba");
+
+
+	return 0;
+
+}
