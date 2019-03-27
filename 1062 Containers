@@ -1,0 +1,72 @@
+//all by greedy
+#include <iostream>
+#include <string>
+#include <vector>
+#include <cstring>
+using namespace std;
+
+int COUNTER;
+
+vector<string> a;
+
+
+int topOfStack[26][2];
+void Clear() {
+	COUNTER = 0;
+	a.clear();
+	memset(topOfStack, 0, sizeof topOfStack);
+}
+bool Find(char * ch,int * indx) {
+	while (*ch != ('Z'+1)) {
+		if (topOfStack[*ch - 65][0] == 1) {
+			*indx = topOfStack[*ch - 65][1];
+			return true;
+		}
+		(*ch)++;
+	}
+	return false;
+}
+
+void AddToStack(char val, int indx) {
+	a[indx].push_back(val);
+}
+void UpdateTop(char nv,char pv, int indx) {
+	//reset prev
+	topOfStack[pv - 65][0] = 0;topOfStack[pv - 65][1] = 0;
+	//set new
+	topOfStack[nv - 65][0] = 1;topOfStack[nv - 65][1] = indx;
+}
+void NewStack(char val) {
+	COUNTER++;
+	string t;t.push_back(val);
+	a.push_back(t);
+	topOfStack[val - 65][0] = 1;topOfStack[val - 65][1] = a.size() - 1;
+}
+int main() {
+
+	string line;
+	int Case = 1;
+	while (cin >> line && line != "end")
+	{
+		Clear();
+		for (int i = 0; i < line.size(); i++)
+		{
+			char ch = line[i];
+			int indx;
+			///
+			if (Find(&ch, &indx)) {
+
+				AddToStack(line[i], indx);
+				UpdateTop(line[i], ch, indx);
+			}
+			else
+				NewStack(line[i]);
+			///
+			
+		}
+		cout << "Case " << Case << ": " << COUNTER << endl;
+		Case++;
+	}
+
+	return 0;
+}
