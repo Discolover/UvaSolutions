@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <vector>
+#include <queue>
+#include <stack>
+
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+vector<queue<int> > a;
+stack<int> cc;
+int contain = 0;
+int TIME;
+int main() {
+	//fstream file;file.open("aaaaaaaa.txt");file.clear();
+	int set;
+
+	scanf("%d", &set);
+	while (set--) {
+		//
+		a.clear();
+		TIME = 0;
+		//
+		int n, s, q;
+		scanf("%d %d %d", &n, &s, &q);
+		for (int i = 0; i < n; i++)
+		{
+			int qi;
+			queue<int> b;
+			scanf("%d", &qi);
+			while (qi--) {
+				int val;
+				scanf("%d", &val);
+				b.push(val);
+				contain++;
+			}
+			a.push_back(b);
+		}
+
+		for (int i = 0;; i++)
+		{
+
+
+			int j = i % n;
+			//unloading
+			while (!cc.empty())
+			{
+				if (cc.top() == j + 1)
+					cc.pop();
+				else {
+					if (a[j].size() < q)
+						a[j].push(cc.top()), cc.pop(), contain++;
+					else
+						break;
+				}
+				TIME++;
+			}
+
+			//loading
+			while (cc.size() < s && !a[j].empty()) {
+				cc.push(a[j].front());
+				a[j].pop();
+				contain--;
+				TIME++;
+			}
+			if (cc.empty() && !contain)
+				break;
+			else
+				TIME += 2;
+		}
+		printf("%d\n",TIME);
+		//file <<TIME << endl;
+	}
+	//file.close();
+	return 0;
+}
