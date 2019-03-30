@@ -1,0 +1,117 @@
+//all tests show correct results(compare to other implementations) but all the same WA
+#include <stdio.h>
+#include <queue>
+#include <cstring>
+
+#include <iostream>
+#include <fstream>
+using namespace std;
+ofstream g;
+queue<vector<int>>  l, r;
+int current;
+int TIME;
+int currentOrder;
+queue<vector<int>> temp;
+queue<vector<int>> inorder;
+void printall() {
+	int x = temp.size();
+	for (int i = 0; i < x; i++)
+	{
+		printf("%d\n", temp.front()[0]);
+		g << temp.front()[0] << endl;
+		if (i + 1 == x)
+			currentOrder = temp.front()[1] + 1;
+		temp.pop();
+	}
+
+}
+
+int main() {
+	g.open("ferry loading.txt");g.clear();
+
+
+	int c;
+	scanf("%d", &c);
+	while (c--) {
+		//
+		
+		//
+		int n, t, m;
+		scanf("%d %d %d", &n, &t, &m);
+		int order = 0;
+		while (m--) {
+			char bank[6];
+			int val;
+			scanf("%d %s", &val, bank);
+
+			if (strcmp(bank, "left") == 0) {
+				vector<int> a = { val,order };
+				l.push(a);
+			}
+			if (strcmp(bank, "right") == 0) {
+				vector<int> a = { val,order };
+				r.push(a);
+			}
+			order++;
+		}
+		 TIME =currentOrder =  current = 0;
+		 queue<vector<int>> * cb = &l;//initially current bank is left bank
+		 queue<vector<int>> * tb;
+		 while (true) {
+			 if (l.empty() && r.empty())//check if both queues are empty
+				 break;
+
+			 if (l.empty() || r.empty())
+				 tb = (l.empty()) ? &r : &l;
+			 else {
+				 if (cb->front()[0] > TIME)
+					 tb = (l.front()[0] < r.front()[0]) ? &l : &r;
+				 else
+					 tb = cb;
+			 }
+
+			 if (tb->front()[0] > TIME)
+				 TIME += tb->front()[0] - TIME;
+
+			 if (cb != tb)
+				 TIME += t, (*cb == l) ? cb = &r : cb = &l;
+
+			 while (current < n && !cb->empty()//grab a cars
+				 && cb->front()[0] <= TIME) {
+
+				 if (currentOrder == cb->front()[1])
+					 inorder.push(cb->front()), cb->pop()
+					 , currentOrder++;
+				 else {
+					 cb->front()[0] = TIME + t;
+					 temp.push(cb->front()), cb->pop();
+				 }
+				 current++;
+				 
+			 }
+
+			 (*cb == l) ? cb = &r : cb = &l;
+
+			 TIME += t;
+
+			 int x = inorder.size();
+			 for (int i = 0; i < x; i++)
+			 {
+				 printf("%d\n", TIME);
+				g << TIME << endl;
+				 inorder.pop();
+			 }
+			 current = 0;
+			 if (!temp.empty() && temp.front()[1] == currentOrder)
+				 printall();
+
+		 }
+		 if (c) {
+			 printf("\n");
+			g << endl;
+		 }
+	}
+
+	g.close();
+	return 0;
+}
