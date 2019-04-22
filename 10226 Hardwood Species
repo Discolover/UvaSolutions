@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <unordered_map>
+#include <string>
+#include <iostream>
+#include <set>
+#include <iomanip>
+#include <fstream>
+using namespace std;
+
+set<string> nms;
+unordered_map<string, float> specs;
+float nmC;
+void Result()
+{
+	for (auto const& x : nms)
+	{
+		cout << x << " " << std::fixed << std::setprecision(4)
+			<< specs[x] * 100 / nmC << endl;
+	}
+}
+int main()
+{
+	int nOfC;
+	string specnm;
+	scanf("%d\n", &nOfC);
+	while (nOfC--)
+	{
+		specs.clear();
+		nms.clear();
+		nmC = 0;
+		while (getline(cin, specnm) && !specnm.empty())
+		{
+			specs[specnm]++;
+			nms.emplace(specnm);
+			nmC++;
+		}
+		
+		Result();
+		if(nOfC)
+			cout << endl;
+	}
+    return 0;
+}
+
